@@ -11,6 +11,6 @@ int main() {
     while (permutation_iterator_next(test)) {
         print_permutation_iterator(test);
     }
-
+    destroy_permutation_iterator(test);
     printf("All done!\n");
 }

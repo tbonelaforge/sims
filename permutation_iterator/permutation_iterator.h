@@ -19,6 +19,7 @@ struct permutation_iterator {
 };
 
 struct permutation_iterator * new_permutation_iterator(int);
+void destroy_permutation_iterator(struct permutation_iterator *);
 struct mixed_radix * new_permutation_control(int);
 struct permutation_iterator * permutation_iterator_next(struct permutation_iterator *);
 void initialize_permutation_iterator_elements(struct permutation_iterator *);

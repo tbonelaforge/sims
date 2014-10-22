@@ -10,10 +10,10 @@ int main() {
     struct mixed_radix * test = new_mixed_radix(3, radices);
     printf("The newly-constructed mixed-radix number looks like:\n");
     print_mixed_radix(test);
-    printf("After incrementing the mixed-radix number, it looks like:\n");
-    increment_mixed_radix(test);
-    print_mixed_radix(test);
+    printf("About to increment...\n");
     while (increment_mixed_radix(test) < 3) {
         print_mixed_radix(test);
     }
+    destroy_mixed_radix(test);
+    printf("All done!\n");
 }

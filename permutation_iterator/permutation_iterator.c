@@ -34,6 +34,12 @@ struct permutation_iterator * new_permutation_iterator(int n) {
     return new_instance;
 }
 
+void destroy_permutation_iterator(struct permutation_iterator * self) {
+    destroy_mixed_radix(self->control);
+    free(self->elements);
+    free(self);
+}
+
 struct permutation_iterator * permutation_iterator_next(struct permutation_iterator * self) {
     int k;
     int j;
@@ -61,6 +67,7 @@ struct mixed_radix * new_permutation_control(int n) {
         radices[i - 2] = i;
     }
     return new_mixed_radix(how_many_radices, radices);
+    free(radices); // new_mixed_radix uses it's own radices array.
 }
 
 void initialize_permutation_iterator_elements(struct permutation_iterator * self) {
@@ -74,9 +81,9 @@ void initialize_permutation_iterator_elements(struct permutation_iterator * self
 void print_permutation_iterator(struct permutation_iterator * self) {
     int i = 0;
 
-    printf("Control:\n");
-    print_mixed_radix(self->control);
-    printf("Elements:\n");
+    //    printf("Control:\n");
+    //    print_mixed_radix(self->control);
+    //    printf("Elements:\n");
     for (i = 0; i < self->how_many_elements; i++) {
         printf("%d", self->elements[i]);
         if (i < self->how_many_elements - 1) {
