@@ -81,9 +81,6 @@ void initialize_permutation_iterator_elements(struct permutation_iterator * self
 void print_permutation_iterator(struct permutation_iterator * self) {
     int i = 0;
 
-    //    printf("Control:\n");
-    //    print_mixed_radix(self->control);
-    //    printf("Elements:\n");
     for (i = 0; i < self->how_many_elements; i++) {
         printf("%d", self->elements[i]);
         if (i < self->how_many_elements - 1) {
