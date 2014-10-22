@@ -33,7 +33,6 @@ void destroy_mixed_radix(struct mixed_radix * self) {
 }
 
 int increment_mixed_radix(struct mixed_radix * self) {
-    //    printf("INside /Users/tford/C/sims/mixed_radix/mixed_radix.c.increment_mixed_radix, got called\n");
     int k = 0;
     
     while (k < self->how_many_radices && 
@@ -50,7 +49,7 @@ void print_mixed_radix(struct mixed_radix * self) {
     int i;
     
     for (i = r - 1; i >= 0; i--) {
-        printf("%d", self->c[i]);
+        printf("%d_%d", self->radices[i], self->c[i]);
         if (i) {
             printf(", ");
         }
