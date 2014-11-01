@@ -33,6 +33,7 @@ struct permutation_iterator * new_permutation_iterator(int n) {
     new_instance->omega = &default_omega;
     new_instance->tau = &default_tau;
     new_instance->sigma_k_k_inverse = &default_sigma_k_k_inverse;
+    new_instance->valid_suffix = &default_valid_suffix;
     new_instance->k = n - 1;
     initialize_permutation_iterator_elements(new_instance);
     return new_instance;
@@ -64,7 +65,8 @@ struct permutation_iterator * permutation_iterator_skip_suffix(struct permutatio
     int k = self->k;
 
     while (k) {
-        if (permutation_iterator_valid_suffix(self, k)) {
+        //        if (permutation_iterator_valid_suffix(self, k)) {
+        if ((*self->valid_suffix)(self, k)) {
             k = k - 1;
         }
         else {
@@ -77,27 +79,7 @@ struct permutation_iterator * permutation_iterator_skip_suffix(struct permutatio
     return self;
 }
 
-int permutation_iterator_valid_suffix(struct permutation_iterator * self, int k) {
-    int length = self->how_many_elements;
-    int last_element = self->elements[length - 1];
-    int next_to_last;
 
-    // Eliminate suffixes ending with 3
-    if (last_element == 3) {
-        return 0;
-    }
-
-    // If checking a long-enough suffix,
-    // eliminate 2 in penultimate position.
-    if (k > length - 2) {
-        return 1;
-    }
-    next_to_last = self->elements[length - 2];
-    if (next_to_last == 2) {
-        return 0;
-    }
-    return 1;
-}
 
 struct permutation_iterator * permutation_iterator_next_block(struct permutation_iterator * self, int k) {
     while (k < self->how_many_elements &&
@@ -185,3 +167,8 @@ void default_sigma_k_k_inverse(struct permutation_iterator * self, int k) {
     }
     self->elements[0] = temp;
 }
+
+int default_valid_suffix(struct permutation_iterator * self, int k) {
+    return 1;
+}
+
