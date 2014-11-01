@@ -51,8 +51,46 @@ struct permutation_iterator * permutation_iterator_next(struct permutation_itera
     j = self->control->c[k];
     (*self->omega)(self, k);
     (*self->tau)(self, k, j);
+    self->k = k;
     return self;
 }
+
+struct permutation_iterator * permutation_iterator_next_valid(struct permutation_iterator * self) {
+   
+    
+    // get numerically next perm.
+    if (!permutation_iterator_next(self)) {
+        return NULL;
+    }
+    return permutation_iterator_skip_suffix(self);
+    // examine k
+    // skip to next acceptable, based on k.
+}
+
+struct permutation_iterator * permutation_iterator_skip_suffix(struct permutation_iterator * self) {
+    int k = self->k + 1;
+    
+    while (k) {
+        if (permutation_iterator_valid_suffix(k)) {
+            k = k - 1;
+        }
+        else {
+            if (!permutation_iterator_next_block(self)) {
+                return NULL;
+            }
+            k = k + 1;
+        }
+    }
+    return self;
+}
+
+struct permutation_iterator * permutation_iterator_next_block(struct permutation * self, int k) {
+    while (self->control->c[k] == k + 1) {
+        (*self->sigma_k_k_inverse)(self, k + 1);
+        
+    }
+}
+*/
 
 struct mixed_radix * new_permutation_control(int n) {
     int how_many_radices = n - 1;
