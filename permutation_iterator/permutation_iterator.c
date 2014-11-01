@@ -8,6 +8,8 @@ void permutation_iterator_flip_elements(struct permutation_iterator *, int);
 
 void permutation_iterator_swap_elements(struct permutation_iterator *, int, int);
 
+int n = 0;
+
 struct permutation_iterator * new_permutation_iterator(int n) {
     struct permutation_iterator * new_instance = NULL;
     struct mixed_radix * control = NULL;
@@ -30,6 +32,7 @@ struct permutation_iterator * new_permutation_iterator(int n) {
     new_instance->elements = elements;
     new_instance->omega = &default_omega;
     new_instance->tau = &default_tau;
+    new_instance->sigma_k_k_inverse = &default_sigma_k_k_inverse;
     initialize_permutation_iterator_elements(new_instance);
     return new_instance;
 }
@@ -57,40 +60,81 @@ struct permutation_iterator * permutation_iterator_next(struct permutation_itera
 
 struct permutation_iterator * permutation_iterator_next_valid(struct permutation_iterator * self) {
    
-    
-    // get numerically next perm.
+//printf("Inside next_valid, got called\n");
+ 
+    //get numerically next perm.
     if (!permutation_iterator_next(self)) {
         return NULL;
     }
+//printf("Inside next_valid, about to skip_suffix, and the self is:\n");
+print_permutation_iterator(self);
+//print_mixed_radix(self->control);
     return permutation_iterator_skip_suffix(self);
-    // examine k
-    // skip to next acceptable, based on k.
 }
 
 struct permutation_iterator * permutation_iterator_skip_suffix(struct permutation_iterator * self) {
-    int k = self->k + 1;
-    
+    int k = self->k + 1; // Translate into element index.
+    //printf("Inside skip_suffix, k is: %d\n", k);
     while (k) {
-        if (permutation_iterator_valid_suffix(k)) {
+//n += 1;
+//if (n >= 6) { exit(1); }
+        if (permutation_iterator_valid_suffix(self, k)) {
+//printf("Inside skip_suffix, determinied valid\n");
             k = k - 1;
         }
         else {
-            if (!permutation_iterator_next_block(self)) {
+//printf("Inside skip_suffix, determinied not valid\n");
+            if (!permutation_iterator_next_block(self, k)) {
+//printf("Inside skip_suffix, not able to skip block, returning nULL\n");
                 return NULL;
             }
+//printf("Inside skip_suffix, after next_block, iterator is:\n");
+//print_permutation_iterator(self);
             k = k + 1;
         }
     }
     return self;
 }
 
-struct permutation_iterator * permutation_iterator_next_block(struct permutation * self, int k) {
-    while (self->control->c[k] == k + 1) {
-        (*self->sigma_k_k_inverse)(self, k + 1);
-        
+int permutation_iterator_valid_suffix(struct permutation_iterator * self, int k) {
+    if (k >= self->how_many_elements - 1) {
+        return 1;
     }
+    int length = self->how_many_elements;
+    int last_element = self->elements[length - 1];
+    int next_to_last = self->elements[length - 2];
+    if (next_to_last == 2 || last_element == 3) {
+        return 0;
+    }
+    return 1;
 }
-*/
+
+struct permutation_iterator * permutation_iterator_next_block(struct permutation_iterator * self, int k) {
+
+    // k is element index.
+    //k_c = k - 1; // translate into control string index.
+    k = k - 1;
+//printf("Inside next_block, got called with k: %d\n", k);
+    while (self->control->c[k] == k + 1) {
+//printf("considering full control digit k: %d", k);
+        (*self->sigma_k_k_inverse)(self, k + 1);
+        self->control->c[k] = 0;
+//printf("Inside next_block, after sigma_k_k_inverse, the self looks like:\n");
+//print_permutation_iterator(self);
+//print_mixed_radix(self->control);
+        k += 1;
+    }
+//printf("Inside next_block, after while loop\n");
+    if (k >= self->how_many_elements - 1) {
+        return NULL;
+    }
+    self->control->c[k] += 1;
+//printf("Inside next_block, about to call tau\n");
+    (*self->tau)(self, k, self->control->c[k]);
+print_permutation_iterator(self);
+    return self;
+}
+
 
 struct mixed_radix * new_permutation_control(int n) {
     int how_many_radices = n - 1;
@@ -140,6 +184,10 @@ void permutation_iterator_flip_elements(struct permutation_iterator * self, int 
 }
 
 void permutation_iterator_swap_elements(struct permutation_iterator * self, int i, int j) {
+//printf("Inside swap, got called with i = %d, j = %d\n", i, j);
+//printf("And self is:\n");
+//print_permutation_iterator(self);
+//print_mixed_radix(self->control);
     int temp = self->elements[i];
     self->elements[i] = self->elements[j];
     self->elements[j] = temp;
@@ -150,6 +198,21 @@ void default_omega(struct permutation_iterator * self, int k) {
 }
 
 void default_tau(struct permutation_iterator * self, int k, int j) {
-    k += 1;
+    //printf("Inside default_tau, got called with k = %d, j = %d\n", k, j);
+    k += 1; // Translate into element-based index.
     permutation_iterator_swap_elements(self, k - j, k);
+//printf("At the end of tau, the self is:\n");
+//print_permutation_iterator(self);
+//print_mixed_radix(self->control);
+}
+
+void default_sigma_k_k_inverse(struct permutation_iterator * self, int k) {
+//printf("Inside default_k_k_invers, got called with k = %d\n", k);
+    int temp = self->elements[k];
+//printf("Inside k_k_inv, temp is: %d\n", temp);
+    while (k - 1 >= 0) {
+        self->elements[k] = self->elements[k - 1];
+        k--;
+    }
+    self->elements[0] = temp;
 }
