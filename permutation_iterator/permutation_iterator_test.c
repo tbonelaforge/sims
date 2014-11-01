@@ -28,5 +28,6 @@ int main() {
         print_permutation_iterator(test);
     }
     */
+    destroy_permutation_iterator(test);
 }
 
