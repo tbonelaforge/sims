@@ -3,6 +3,10 @@
 #include "permutation_iterator.h"
 #include "mixed_radix.h"
 
+void visit(struct permutation_iterator * self) {
+    print_permutation_iterator(self);
+}
+
 int main() {
     printf("About to construct a new permutation_iterator\n");
     struct permutation_iterator * test = new_permutation_iterator(4);
@@ -11,55 +15,18 @@ int main() {
     print_mixed_radix(test->control);
     printf("About to iterate...\n");
     
-    while (permutation_iterator_next_valid(test)) {
-printf("Visiting\\/\\/\\/");
-        print_permutation_iterator(test);
-        print_mixed_radix(test->control);
-    }
-    
+
+    do {
+        if (!permutation_iterator_skip_suffix(test)) {
+            break;
+        }
+        visit(test);
+    } while(permutation_iterator_next(test));
+
     /*
-    permutation_iterator_next_valid(test);
-printf("Visiting\\/\\/\\/");
-    print_permutation_iterator(test);
-    print_mixed_radix(test->control);
- 
-    permutation_iterator_next_valid(test);
-printf("Visiting\\/\\/\\/");
-    print_permutation_iterator(test);
-    print_mixed_radix(test->control);
-
-permutation_iterator_next_valid(test);
-printf("Visiting\\/\\/\\/");
-    print_permutation_iterator(test);
-    print_mixed_radix(test->control);
-
-permutation_iterator_next_valid(test);
-printf("Visiting\\/\\/\\/");
-    print_permutation_iterator(test);
-    print_mixed_radix(test->control);
-
-permutation_iterator_next_valid(test);
-printf("Visiting\\/\\/\\/");
-    print_permutation_iterator(test);
-    print_mixed_radix(test->control);
- 
-    permutation_iterator_next_valid(test);
-printf("Visiting\\/\\/\\/");
-    print_permutation_iterator(test);
-    print_mixed_radix(test->control);
-
-permutation_iterator_next_valid(test);
-printf("Visiting\\/\\/\\/");
-    print_permutation_iterator(test);
-    print_mixed_radix(test->control);
-
-permutation_iterator_next_valid(test);
-printf("Visiting\\/\\/\\/");
-    print_permutation_iterator(test);
-    print_mixed_radix(test->control);
-
-    destroy_permutation_iterator(test);
-    printf("All done!\n");
+    while (permutation_iterator_next(test)) {
+        print_permutation_iterator(test);
+    }
     */
 }
 

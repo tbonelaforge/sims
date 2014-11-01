@@ -40,7 +40,9 @@ int increment_mixed_radix(struct mixed_radix * self) {
         self->c[k] = 0;
         k += 1;
     }
-    self->c[k] += 1;
+    if (k < self->how_many_radices) {
+        self->c[k] += 1;
+    }
     return k;
 }
 
