@@ -12,54 +12,8 @@ int main() {
     printf("About to iterate...\n");
     
     while (permutation_iterator_next_valid(test)) {
-printf("Visiting\\/\\/\\/");
         print_permutation_iterator(test);
         print_mixed_radix(test->control);
     }
-    
-    /*
-    permutation_iterator_next_valid(test);
-printf("Visiting\\/\\/\\/");
-    print_permutation_iterator(test);
-    print_mixed_radix(test->control);
- 
-    permutation_iterator_next_valid(test);
-printf("Visiting\\/\\/\\/");
-    print_permutation_iterator(test);
-    print_mixed_radix(test->control);
-
-permutation_iterator_next_valid(test);
-printf("Visiting\\/\\/\\/");
-    print_permutation_iterator(test);
-    print_mixed_radix(test->control);
-
-permutation_iterator_next_valid(test);
-printf("Visiting\\/\\/\\/");
-    print_permutation_iterator(test);
-    print_mixed_radix(test->control);
-
-permutation_iterator_next_valid(test);
-printf("Visiting\\/\\/\\/");
-    print_permutation_iterator(test);
-    print_mixed_radix(test->control);
- 
-    permutation_iterator_next_valid(test);
-printf("Visiting\\/\\/\\/");
-    print_permutation_iterator(test);
-    print_mixed_radix(test->control);
-
-permutation_iterator_next_valid(test);
-printf("Visiting\\/\\/\\/");
-    print_permutation_iterator(test);
-    print_mixed_radix(test->control);
-
-permutation_iterator_next_valid(test);
-printf("Visiting\\/\\/\\/");
-    print_permutation_iterator(test);
-    print_mixed_radix(test->control);
-
-    destroy_permutation_iterator(test);
-    printf("All done!\n");
-    */
 }
 
