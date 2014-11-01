@@ -59,6 +59,7 @@ struct permutation_iterator * permutation_iterator_next(struct permutation_itera
     return self;
 }
 
+
 struct permutation_iterator * permutation_iterator_skip_suffix(struct permutation_iterator * self) {
     int k = self->k;
 
@@ -79,13 +80,19 @@ struct permutation_iterator * permutation_iterator_skip_suffix(struct permutatio
 int permutation_iterator_valid_suffix(struct permutation_iterator * self, int k) {
     int length = self->how_many_elements;
     int last_element = self->elements[length - 1];
+    int next_to_last;
+
+    // Eliminate suffixes ending with 3
     if (last_element == 3) {
         return 0;
     }
+
+    // If checking a long-enough suffix,
+    // eliminate 2 in penultimate position.
     if (k > length - 2) {
         return 1;
     }
-    int next_to_last = self->elements[length - 2];
+    next_to_last = self->elements[length - 2];
     if (next_to_last == 2) {
         return 0;
     }
@@ -93,8 +100,8 @@ int permutation_iterator_valid_suffix(struct permutation_iterator * self, int k)
 }
 
 struct permutation_iterator * permutation_iterator_next_block(struct permutation_iterator * self, int k) {
-
-    while (self->control->c[k] == k + 1) {
+    while (k < self->how_many_elements &&
+           self->control->c[k] == k + 1) { // 'full' digit in control string.
         (*self->sigma_k_k_inverse)(self, k + 1);
         self->control->c[k] = 0;
         k += 1;
