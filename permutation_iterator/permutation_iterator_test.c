@@ -33,27 +33,16 @@ int valid_suffix(struct permutation_iterator * self, int k) {
 
 
 int main() {
+    struct permutation_iterator * test;
+
     printf("About to construct a new permutation_iterator\n");
-    struct permutation_iterator * test = new_permutation_iterator(4);
+    test = new_permutation_iterator(4);
     test->valid_suffix = &valid_suffix;
     printf("The new permutation iterator looks like:\n");
     print_permutation_iterator(test);
     print_mixed_radix(test->control);
     printf("About to iterate...\n");
-    
-
-    do {
-        if (!permutation_iterator_skip_suffix(test)) {
-            break;
-        }
-        visit(test);
-    } while(permutation_iterator_next(test));
-
-    /*
-    while (permutation_iterator_next(test)) {
-        print_permutation_iterator(test);
-    }
-    */
+    permutation_iterator_visit_valid(test, &visit);
     destroy_permutation_iterator(test);
 }
 

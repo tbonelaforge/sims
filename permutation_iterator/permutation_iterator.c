@@ -45,6 +45,15 @@ void destroy_permutation_iterator(struct permutation_iterator * self) {
     free(self);
 }
 
+void permutation_iterator_visit_valid(struct permutation_iterator * self, ptr2visit_fn visit) {
+    do {
+        if (!permutation_iterator_skip_suffix(self)) {
+            break;
+        }
+        (*visit)(self);
+    } while (permutation_iterator_next(self));
+}
+
 struct permutation_iterator * permutation_iterator_next(struct permutation_iterator * self) {
     int k;
     int j;
