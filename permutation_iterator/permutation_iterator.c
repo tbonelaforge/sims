@@ -81,7 +81,7 @@ struct permutation_iterator * permutation_iterator_skip_suffix(struct permutatio
             if (!permutation_iterator_next_block(self, k)) {
                 return NULL;
             }
-            k = k + 1;
+            k = self->k; // self.next_block took note of changed k.
         }
     }
     return self;
@@ -101,6 +101,7 @@ struct permutation_iterator * permutation_iterator_next_block(struct permutation
     }
     self->control->c[k] += 1;
     (*self->tau)(self, k, self->control->c[k]);
+    self->k = k; // Take note of most recently-changed k.
     return self;
 }
 
