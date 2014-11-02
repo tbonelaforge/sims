@@ -45,6 +45,7 @@ void destroy_permutation_iterator(struct permutation_iterator * self) {
     free(self);
 }
 
+
 void permutation_iterator_visit_valid(struct permutation_iterator * self, ptr2visit_fn visit) {
     do {
         if (!permutation_iterator_skip_suffix(self)) {
@@ -69,12 +70,10 @@ struct permutation_iterator * permutation_iterator_next(struct permutation_itera
     return self;
 }
 
-
 struct permutation_iterator * permutation_iterator_skip_suffix(struct permutation_iterator * self) {
     int k = self->k;
 
     while (k) {
-        //        if (permutation_iterator_valid_suffix(self, k)) {
         if ((*self->valid_suffix)(self, k)) {
             k = k - 1;
         }
@@ -92,8 +91,8 @@ struct permutation_iterator * permutation_iterator_skip_suffix(struct permutatio
 
 struct permutation_iterator * permutation_iterator_next_block(struct permutation_iterator * self, int k) {
     while (k < self->how_many_elements &&
-           self->control->c[k] == k + 1) { // 'full' digit in control string.
-        (*self->sigma_k_k_inverse)(self, k + 1);
+           self->control->c[k] == k) { // 'full' digit in control string.
+        (*self->sigma_k_k_inverse)(self, k);
         self->control->c[k] = 0;
         k += 1;
     }

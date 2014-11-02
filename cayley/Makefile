@@ -1,7 +1,7 @@
-all: adjacent_test.bin
+all: cayley_test.bin
 
-adjacent_test.bin: adjacent_test.c adjacent.h adjacent.o
-	gcc -I ./ adjacent_test.c adjacent.o -o adjacent_test.bin
+cayley_test.bin: cayley_test.c cayley.h cayley.o
+	gcc -I ./ cayley_test.c cayley.o -o cayley_test.bin
 
-adjacent.o: adjacent.c adjacent.h
-	gcc -I ./ -c adjacent.c
+cayley.o: cayley.c cayley.h
+	gcc -I ./ -c cayley.c

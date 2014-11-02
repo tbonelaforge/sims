@@ -1,6 +1,6 @@
 #include <stdio.h>
 
-#include "adjacent.h"
+#include "cayley.h"
 
 int main() {
     char * v1 = "abcd";
