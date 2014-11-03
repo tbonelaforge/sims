@@ -5,7 +5,7 @@
 
 int MAXELEMENTS = 10;
 
-int cayley_adjacent(char * v1, char * v2, int n) {
+int cayley_adjacent(char * v1, char * v2, int n, int * d) {
     char temp[MAXELEMENTS + 1];
     int i;
 
@@ -14,10 +14,12 @@ int cayley_adjacent(char * v1, char * v2, int n) {
     for (i = 0; i < n - 1; i++) {
         swap_char(temp, i, i + 1);
         if (strcmp(temp, v2) == 0) {
+            *d = i + 1;
             return 1;
         }
         swap_char(temp, i + 1, i);
     }
+    *d = 0;
     return 0;
 }
 
